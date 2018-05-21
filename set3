@@ -1,0 +1,15 @@
+Q1
+0.75
+0.31640625
+0.0563135147
+
+Q2
+after 1 step
+A: 3 B:3 C:3 D:3
+
+after infinite steps
+A: 3 B:3 C:3 D:3
+
+Q3
+IGNORES ROBOT MEASUREMENTS
+IT LIKELY FAILS
