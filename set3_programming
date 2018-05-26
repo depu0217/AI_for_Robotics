@@ -1,39 +1,39 @@
 Q4
   def move(self, motion,tolerance=0.001): # Do not change the name of this function
 
-        steering=motion[0]
-        distance=motion[1]
+        alpha = motion[0]
+        d     = motion[1]
         if abs(steering)>max_steering_angle:
             raise ValueError,'Exceeding max steering angle'
         if distance<0.0:
             raise ValueError, 'Moving backwards is not valid'
         # make a copy
-        res=robot()
-        res.length=self.length
-        res.bearing_noise=self.bearing_noise
-        res.steering_noise=self.steering_noise
-        res.distance_noise=self.distance_noise
+        res = robot()
+        res.L = self.length
+        res.bearing_noise  = self.bearing_noise
+        res.steering_noise = self.steering_noise
+        res.distance_noise = self.distance_noise
         
         # apply noise
-        steering2=random.gauss(steering, self.steering_noise)
-        distance2=random.gauss(distance, self.distance_noise)
+        alpha2 = random.gauss(alpha, self.steering_noise)
+        d2     = random.gauss(d, self.distance_noise)
 
         #Execute motion
-        turn=tan(steering2)*distance2/res.length
+        beta=tan(alpha2)*d2/res.L
         
-        if abs(turn)<tolerance:
+        if abs(beta)<tolerance:
             #linear approximation
-            res.x=self.x + (distance2 * cos(self.orientation))
-            res.y=self.y + (distance2 * sin(self.orientation))
+            res.x=self.x + (d2 * cos(self.orientation))
+            res.y=self.y + (d2 * sin(self.orientation))
             res.orientation = (self.orientation + turn) % (2.0 * pi)
         else:
             # bicycle model for motion
-            radius=distance2/ turn
-            cx=self.x-sin(self.orientation)*radius
-            cy=self.y+cos(self.orientation)*radius
-            res.orientation=(self.orientation + turn) % (2.0 * pi)
-            self.x = cx + sin(res.orientation)*radius
-            self.y = cy - cos(res.orientation)*radius
+            R  = d2/ beta
+            cx = self.x - sin(self.orientation)*R
+            cy = self.y + cos(self.orientation)*R
+            res.orientation = (self.orientation + beta) % (2.0 * pi)
+            self.x = cx + sin(res.orientation)*R
+            self.y = cy - cos(res.orientation)*R
         
         return res 
 
